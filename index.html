@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Juntar Foto</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicons/favicon-16x16.png">
+  <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicons/favicon.ico">
+  <link rel="manifest" href="assets/img/favicons/manifest.json">
+  <meta name="msapplication-TileImage" content="assets/img/favicons/mstile-150x150.png">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700&amp;display=swap"
+    rel="stylesheet">
+  <link href="vendors/prism/prism.css" rel="stylesheet">
+  <link href="vendors/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="assets/css/theme.css" rel="stylesheet" />
+</head>
+
+<body>
+  <main class="main" id="top">
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark" data-navbar-on-scroll="data-navbar-on-scroll">
+      <div class="container"><a class="navbar-brand" href="index.html"><img src="" alt="" /></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i
+            class="fa-solid fa-bars text-white fs-3"></i></button>
+      </div>
+    </nav>
+    <div class="bg-dark">
+      <img class="img-fluid position-absolute end-0" src="assets/img/hero/hero-bg.png" alt="" />
+      <section>
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-lg-12 text-center text-lg-start">
+              <h1 class="text-white">Juntar images de forma simples</h1>
+              <p class="text-white py-lg-3 py-2">O processo é bem simples: escolha uma imagem do seu computador,
+                selecione o timbre desejado e clique em Criar.</p>
+            </div>
+            <hr />
+            <div class="col-lg-12">
+              <h3 class="text-white">1º Passo: Escolha uma imagem do seu celular ou computador.</h3>
+              <input type="file" @change="getFile" />
+              <br />
+              <br />
+              <h3 class="text-white">2º Passo: Selecione um dos timbres abaixo.</h3>
+              <div class="row">
+                <div v-for="timbre in timbres" class="col-lg-3 col-6 mt-2" style="position:relative;">
+                  <span v-if="timbreSelected" style="position: absolute;left:10px;top:-10px;">
+                    <span v-html="timbreSelected.id == timbre.id ? svgImage :''"></span>
+                    </span>
+                  <img @click="selecionarTimbre(timbre)"
+                    class="text-center col-12 col-lg-12 col-md-12 col-sm-12" :src="timbre.src" width="200" />
+                </div>
+              </div>
+              <br />
+              <br />
+              <div class="d-sm-flex align-items-center gap-3">
+                <button class="btn btn-success text-black mb-3 w-100" @click="criar"
+                  v-if="isSelectedTimbre">Criar</button>
+              </div>
+              <div class="row" v-if="isJunted">
+                <div class="col-12 col-lg-12 col-sm-12 col-md-12 text-center">
+                  <img id="img" class="mr-auto ml-auto"> <br /><br />
+                  <a class="btn btn-info mb-3 w-100" id="download">Baixar</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script src="assets/js/mergeImages.js"></script>
+  <script>
+
+    const toBase64 = file => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+
+    new Vue({
+      el: '#top',
+      data: {
+        image: null,
+        isSelectedTimbre: false,
+        isJunted: false,
+        timbreSelected: null,
+        fileSelected: "",
+        svgImage: `<?xml version="1.0" standalone="no"?>
+                <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+                <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="48.000000pt" height="48.000000pt"
+                  viewBox="0 0 48.000000 48.000000" preserveAspectRatio="xMidYMid meet">
+
+                  <g transform="translate(0.000000,48.000000) scale(0.100000,-0.100000)" fill="#2fa15c" stroke="none">
+                    <path d="M281 250 c-29 -38 -55 -70 -58 -70 -3 0 -23 14 -45 31 -21 17 -42 29
+                -45 25 -6 -6 76 -85 89 -86 8 0 128 152 128 163 0 19 -20 1 -69 -63z" />
+                  </g>
+                </svg>`,
+        timbres: [
+          { id: 1, src: "/images/image1.png" },
+          { id: 2, src: "/images/image2.png" }
+        ]
+      },
+      created: function () {
+      },
+      methods: {
+        criar() {
+          const me = this;
+
+          if (this.fileSelected) {
+
+            me.isJunted = true;
+
+            mergeImages([me.fileSelected, me.image])
+              .then(b64 => {
+                document.querySelector('#img').src = b64
+                download.href = b64;
+                download.download = "filename.png"
+              });
+          }
+          else {
+            alert('Selecione uma imagem do seu dispositivo.')
+          }
+
+        },
+        selecionarTimbre(timbre) {
+          this.isSelectedTimbre = true;
+          this.timbreSelected = timbre;
+          this.image = timbre.src;
+        },
+        async getFile(ev) {
+          const file = ev.target.files[0];
+          this.fileSelected = await toBase64(file);
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
