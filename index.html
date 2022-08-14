@@ -76,9 +76,9 @@
           <div class="container">
             <div class="row align-items-center">
               <div class="col-lg-12 text-center text-lg-start">
-                <h1 class="text-white">Juntar images de forma simples</h1>
+                <h1 class="text-white">Tema Dep. Jair Farias</h1>
                 <p class="text-white py-lg-3 py-2">O processo é bem simples: escolha uma imagem do seu computador,
-                  selecione o timbre desejado e clique em Criar.</p>
+                  selecione o timbre desejado.</p>
               </div>
               <hr />
               <div class="col-lg-12">
@@ -105,19 +105,23 @@
                 <br />
                 <br />
                 <div class="row">
-                  <div class="col-12 col-lg-4 col-sm-4 col-md-4">
+                  <div class="col-12 col-lg-8 col-sm-8 col-md-8">
                     <div class="row" v-if="isJunted">
                       <div class="col-12 col-lg-12 col-sm-12 col-md-12 text-center">
-                        <img id="img" class="mr-auto ml-auto"> <br /><br />
+                        <img id="img" class="mr-auto ml-auto img-fluid"> <br /><br />
                       </div>
                     </div>
                   </div>
-                  <div class="col-12 col-lg-8 col-sm-8 col-md-8">
+                  <div class="col-12 col-lg-4 col-sm-4 col-md-4">
                     <div class="row" v-if="isSelectedTimbre && fileSelected">
                       <div class="col-12">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                           <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#geral" type="button"
+                              role="tab" aria-controls="geral" aria-selected="false">Geral</button>
+                          </li>
+                          <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
                               type="button" role="tab" aria-controls="home" aria-selected="true">Imagem
                               Principal</button>
                           </li>
@@ -127,7 +131,7 @@
                           </li>
                         </ul>
                         <div class="tab-content" v-if="timbreSelected">
-                          <div class="tab-pane active text-center" id="home" role="tabpanel" aria-labelledby="home-tab">
+                          <div class="tab-pane text-center" id="home" role="tabpanel" aria-labelledby="home-tab">
                             <br />
                             <p>Posição da Imagem Principal</p>
                             <div
@@ -146,13 +150,12 @@
                             </div>
                             <br />
                             Tamanho da Imagem Principal <br />
-                            <input type="range" min="0" max="1000" v-model="options[2].width"
+                            <input type="range" min="0" max="2000" v-model="options[2].width"
                               @input="alterarTamanho(0,'x')" />
-                            <input type="range" min="0" max="1000" v-model="options[2].height"
+                            <input type="range" min="0" max="2000" v-model="options[2].height"
                               @input="alterarTamanho(0,'y')" />
                           </div>
-                          <div v-if="timbreSelected" class="tab-pane text-center" id="profile" role="tabpanel"
-                            aria-labelledby="profile-tab">
+                          <div class="tab-pane text-center" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                             <br />
                             <p>Posição da Timbre</p>
                             <div
@@ -171,10 +174,38 @@
                             </div>
                             <br />
                             Tamanho do Timbre <br />
-                            <input type="range" min="0" max="1000" v-model="options[3].width"
+                            <input type="range" min="0" max="2000" v-model="options[3].width"
                               @input="alterarTamanho(0,'x')" />
-                            <input type="range" min="0" max="1000" v-model="options[3].height"
+                            <input type="range" min="0" max="2000" v-model="options[3].height"
                               @input="alterarTamanho(0,'y')" />
+                          </div>
+                          <div class="tab-pane active text-left" id="geral" role="tabpanel" aria-labelledby="geral">
+                            <br />
+                            <p>Tamanho da Imagem</p>
+                            <button @click="changeSizeImage(200,400)"
+                              class="btn btn-sm btn-info">200x400px</button><br />
+                            <button @click="changeSizeImage(400,600)"
+                              class="btn btn-sm btn-info">400x600px</button><br />
+                            <button @click="changeSizeImage(1080,1920)" class="btn btn-sm btn-info">(Stories Whatsapp)
+                              750x1334px</button><br /><br />
+                            <p>Customizado</p>
+                            <div class="row">
+                              <div class="col-12 col-lg-5">
+                                <input type="number" class="form-control border-0 pt-2 pb-2"
+                                  @blur="isAtualizar=true;criar()" v-model="imageSizes.width" />
+                              </div>
+                              <div class="col-12 col-lg-7">
+                                <div class="row">
+                                  <div class="col-12 col-lg-8">
+                                    <input type="number" class="form-control border-0 pt-2 pb-2"
+                                      @blur="isAtualizar=true;criar()" v-model="imageSizes.height" />
+                                  </div>
+                                  <div class="col-12 col-lg-4">
+                                    <button class="btn btn-primary btn-sm">Aplicar</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -186,151 +217,15 @@
           </div>
       </div>
       </section>
-  </div>
-  </main>
+    </main>
   </div>
   <!-- Option 1: Bootstrap Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-  <script src="assets/js/mergeImages.js"></script>
-  <script>
-
-    const toBase64 = file => new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = error => reject(error);
-    });
-
-    const vm = new Vue({
-      el: '#top',
-      data: {
-        image: null,
-        isSelectedTimbre: false,
-        isJunted: false,
-        timbreSelected: null,
-        fileSelected: "",
-        svgImage: `<?xml version="1.0" standalone="no"?>
-                <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
-                <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="48.000000pt" height="48.000000pt"
-                  viewBox="0 0 48.000000 48.000000" preserveAspectRatio="xMidYMid meet">
-
-                  <g transform="translate(0.000000,48.000000) scale(0.100000,-0.100000)" fill="#2fa15c" stroke="none">
-                    <path d="M281 250 c-29 -38 -55 -70 -58 -70 -3 0 -23 14 -45 31 -21 17 -42 29
-                -45 25 -6 -6 76 -85 89 -86 8 0 128 152 128 163 0 19 -20 1 -69 -63z" />
-                  </g>
-                </svg>`,
-        timbres: [
-        ],
-        options: [
-          { x: 0, y: 0 },
-          { x: 0, y: 0 },
-          { width: 300, height: 300 },
-          { width: 300, height: 300 },
-        ],
-        lastNum: 0
-      },
-      created: function () {
-        const me = this;
-
-        const BASES_URLS = [
-          'https://my-json-server.typicode.com/taffarelxavier/temajairfarias44777',
-          'http://192.168.1.4:3000'
-        ];
-
-        fetch(`${BASES_URLS[0]}/timbres`, {
-          "headers": {
-            "accept": "application/json"
-          },
-          "body": null,
-          "method": "GET",
-          "mode": "cors",
-          "credentials": "omit"
-        }).then(response => response.json())
-          .then(data => {
-            me.timbres = data;
-          });
-      },
-      methods: {
-        criar() {
-          const me = this;
-
-          if (this.fileSelected) {
-
-            me.isJunted = true;
-
-            mergeImages([
-              {
-                src: me.fileSelected,
-                x: me.options[0].x,
-                y: me.options[0].y,
-                width: me.options[2].width,
-                height: me.options[2].height
-              },
-              {
-                src: me.image,
-                x: me.options[1].x,
-                y: me.options[1].y,
-                width: me.options[3].width,
-                height: me.options[3].height
-              }])
-              .then(b64 => {
-                document.querySelector('#img').src = b64
-                download.href = b64;
-                download.download = "filename.png"
-              });
-          }
-          else {
-            alert('Selecione primeiro uma imagem em "Escolher arquivo" do seu dispositivo.')
-          }
-
-        },
-        sizingImage(ev) {
-          let value = ev.target.value;
-          if (this.lastNum < value) {
-            console.log("increasing");
-          } else {
-            console.log("decreasing");
-          }
-          this.lastNum = value;
-          console.log("onInput: " + value);
-        },
-        changeImage(optionIndex, tipo) {
-          const VALUE = 5;
-          switch (tipo) {
-            case 'up':
-              this.options[optionIndex].y -= VALUE;
-              break;
-            case 'right':
-              this.options[optionIndex].x += VALUE;
-              break;
-            case 'down':
-              this.options[optionIndex].y += VALUE;
-              break;
-            case 'left':
-              this.options[optionIndex].x -= VALUE;
-              break;
-          }
-          this.criar();
-        },
-        alterarTamanho(optionIndex, tipo) {
-          this.criar();
-        },
-        selecionarTimbre(timbre) {
-          this.isSelectedTimbre = true;
-          this.timbreSelected = timbre;
-          this.image = timbre.src;
-          this.criar();
-        },
-        async getFile(ev) {
-          const file = ev.target.files[0];
-          this.fileSelected = await toBase64(file);
-          this.criar();
-        }
-      }
-    });
+  <script src="assets/js/mergeImages.js?v=1"></script>
+  <script src="assets/js/main.js?v=1">
   </script>
 </body>
 
