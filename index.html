@@ -19,61 +19,169 @@
   <link href="vendors/prism/prism.css" rel="stylesheet">
   <link href="vendors/swiper/swiper-bundle.min.css" rel="stylesheet">
   <link href="assets/css/theme.css" rel="stylesheet" />
+  <style>
+    .control-button {
+      border: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+      margin: 0;
+      width: 30px;
+      height: 30px;
+    }
+
+    .arrow {
+      border: solid black;
+      border-width: 0 3px 3px 0;
+      display: inline-block;
+      padding: 3px;
+    }
+
+    .right {
+      transform: rotate(-45deg);
+      -webkit-transform: rotate(-45deg);
+    }
+
+    .left {
+      transform: rotate(135deg);
+      -webkit-transform: rotate(135deg);
+    }
+
+    .up {
+      transform: rotate(-135deg);
+      -webkit-transform: rotate(-135deg);
+    }
+
+    .down {
+      transform: rotate(45deg);
+      -webkit-transform: rotate(45deg);
+    }
+  </style>
 </head>
 
 <body>
-  <main class="main" id="top">
-    <nav class="navbar navbar-expand-lg fixed-top navbar-dark" data-navbar-on-scroll="data-navbar-on-scroll">
-      <div class="container"><a class="navbar-brand" href="index.html"><img src="" alt="" /></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i
-            class="fa-solid fa-bars text-white fs-3"></i></button>
+  <div id="top">
+    <nav v-if="isJunted && fileSelected && isSelectedTimbre"
+      class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" style="padding:20px 0px">
+      <div class="container-fluid">
+        <a class="btn btn-info" id="download">Baixar</a>
       </div>
     </nav>
-    <div class="bg-dark">
-      <img class="img-fluid position-absolute end-0" src="assets/img/hero/hero-bg.png" alt="" />
-      <section>
-        <div class="container">
-          <div class="row align-items-center">
-            <div class="col-lg-12 text-center text-lg-start">
-              <h1 class="text-white">Juntar images de forma simples</h1>
-              <p class="text-white py-lg-3 py-2">O processo é bem simples: escolha uma imagem do seu computador,
-                selecione o timbre desejado e clique em Criar.</p>
-            </div>
-            <hr />
-            <div class="col-lg-12">
-              <h3 class="text-white">1º Passo: Escolha uma imagem do seu celular ou computador.</h3>
-              <input type="file" @change="getFile" />
-              <br />
-              <br />
-              <h3 class="text-white">2º Passo: Selecione um dos timbres abaixo.</h3>
-              <div class="row">
-                <div v-for="timbre in timbres" class="col-lg-3 col-6 mt-2" style="position:relative;">
-                  <span v-if="timbreSelected" style="position: absolute;left:10px;top:-10px;">
-                    <span v-html="timbreSelected.id == timbre.id ? svgImage :''"></span>
-                    </span>
-                  <img @click="selecionarTimbre(timbre)"
-                    class="text-center col-12 col-lg-12 col-md-12 col-sm-12" :src="timbre.src" width="200" />
+    <div v-if="isJunted && fileSelected && isSelectedTimbre" style="margin-bottom:50px"><br /></div>
+    <main class="main">
+      <div class="bg-dark">
+        <img class="img-fluid position-absolute end-0" src="assets/img/hero/hero-bg.png" alt="" />
+        <section>
+          <div class="container">
+            <div class="row align-items-center">
+              <div class="col-lg-12 text-center text-lg-start">
+                <h1 class="text-white">Juntar images de forma simples</h1>
+                <p class="text-white py-lg-3 py-2">O processo é bem simples: escolha uma imagem do seu computador,
+                  selecione o timbre desejado e clique em Criar.</p>
+              </div>
+              <hr />
+              <div class="col-lg-12">
+                <h3 class="text-white">1º Passo: Escolha uma imagem do seu celular ou computador.</h3>
+                <!-- INPUT FILE IMAGES -->
+                <input type="file" @change="getFile" accept="image/*" />
+                <br />
+                <br />
+                <h3 class="text-white">2º Passo: Selecione um dos timbres abaixo.</h3>
+                <div style="overflow-y: auto;">
+                  <div style="width: 1000px;height: 200px;white-space: nowrap;position:relative;">
+                    <!-- TIMBRES -->
+                    <div v-for="timbre in timbres" style="position:relative;display: inline;">
+                      <span v-if="timbreSelected"
+                        style="position: absolute;left:8px;top:-82px;background:#fff;border-radius: 100%;">
+                        <span v-html="timbreSelected.id == timbre.id ? svgImage :''"></span>
+                      </span>
+                      <img @click="selecionarTimbre(timbre)" :src="timbre.src"
+                        style="width: 200px;height: 200px;display: inline;" />
+                    </div>
+                    <!-- FIM TIMBRES -->
+                  </div>
                 </div>
-              </div>
-              <br />
-              <br />
-              <div class="d-sm-flex align-items-center gap-3">
-                <button class="btn btn-success text-black mb-3 w-100" @click="criar"
-                  v-if="isSelectedTimbre">Criar</button>
-              </div>
-              <div class="row" v-if="isJunted">
-                <div class="col-12 col-lg-12 col-sm-12 col-md-12 text-center">
-                  <img id="img" class="mr-auto ml-auto"> <br /><br />
-                  <a class="btn btn-info mb-3 w-100" id="download">Baixar</a>
+                <br />
+                <br />
+                <div class="row" v-if="isJunted">
+                  <div class="col-12 col-lg-12 col-sm-12 col-md-12 text-center">
+                    <img id="img" class="mr-auto ml-auto"> <br /><br />
+                  </div>
+                </div>
+                <div class="row" v-if="isSelectedTimbre && fileSelected">
+                  <div class="col-12">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
+                          type="button" role="tab" aria-controls="home" aria-selected="true">Imagem Principal</button>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
+                          type="button" role="tab" aria-controls="profile" aria-selected="false">Timbre</button>
+                      </li>
+                    </ul>
+                    <div class="tab-content" v-if="timbreSelected">
+                      <div class="tab-pane active text-center" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <br />
+                        <p>Posição da Imagem Principal</p>
+                        <div style="position: relative; width: 90px;height:90px;border:1px solid lime;margin:0px auto;">
+                          <button @click="changeImage(0,'up')" class="control-button"
+                            style="position: absolute;top: 1px; left:32.5%;width:30px;"><i
+                              class="arrow up"></i></button>
+                          <button @click="changeImage(0,'right')" class="control-button"
+                            style="position: absolute;right:0;top:34%;width:30px;"><i class="arrow right"></i></button>
+                          <button @click="changeImage(0,'down')" class="control-button"
+                            style="position: absolute;bottom:1px; left:32.5%;width:30px;"><i
+                              class="arrow down"></i></button>
+                          <button @click="changeImage(0,'left')" class="control-button"
+                            style="position: absolute;top:34%;width:30px;"><i class="arrow left"></i></button>
+                        </div>
+                        <br />
+                        Tamanho da Imagem Principal <br />
+                        <input type="range" min="0" max="1000" v-model="options[2].width"
+                          @input="alterarTamanho(0,'x')" />
+                        <input type="range" min="0" max="1000" v-model="options[2].height"
+                          @input="alterarTamanho(0,'y')" />
+                      </div>
+                      <div v-if="timbreSelected" class="tab-pane text-center" id="profile" role="tabpanel"
+                        aria-labelledby="profile-tab">
+                        <br />
+                        <p>Posição da Timbre</p>
+                        <div style="position: relative; width: 90px;height:90px;border:1px solid lime;margin:0px auto;">
+                          <button @click="changeImage(1,'up')" class="control-button"
+                            style="position: absolute;top: 1px; left:32.5%;width:30px;"><i
+                              class="arrow up"></i></button>
+                          <button @click="changeImage(1,'right')" class="control-button"
+                            style="position: absolute;right:0;top:34%;width:30px;"><i class="arrow right"></i></button>
+                          <button @click="changeImage(1,'down')" class="control-button"
+                            style="position: absolute;bottom:1px; left:32.5%;width:30px;"><i
+                              class="arrow down"></i></button>
+                          <button @click="changeImage(1,'left')" class="control-button"
+                            style="position: absolute;top:34%;width:30px;"><i class="arrow left"></i></button>
+                        </div>
+                        <br />
+                        Tamanho do Timbre <br />
+                        <input type="range" min="0" max="1000" v-model="options[3].width"
+                          @input="alterarTamanho(0,'x')" />
+                        <input type="range" min="0" max="1000" v-model="options[3].height"
+                          @input="alterarTamanho(0,'y')" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+      </div>
       </section>
-    </div>
+  </div>
   </main>
+  </div>
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
   <script src="assets/js/mergeImages.js"></script>
   <script>
@@ -85,7 +193,7 @@
       reader.onerror = error => reject(error);
     });
 
-    new Vue({
+    const vm = new Vue({
       el: '#top',
       data: {
         image: null,
@@ -104,11 +212,35 @@
                   </g>
                 </svg>`,
         timbres: [
-          { id: 1, src: "/images/image1.png" },
-          { id: 2, src: "/images/image2.png" }
-        ]
+        ],
+        options: [
+          { x: 0, y: 0 },
+          { x: 0, y: 0 },
+          { width: 300, height: 300 },
+          { width: 300, height: 300 },
+        ],
+        lastNum: 0
       },
       created: function () {
+        const me = this;
+
+        const BASES_URLS = [
+          'https://my-json-server.typicode.com/taffarelxavier/temajairfarias44777',
+          'http://192.168.1.4:3000'
+        ];
+
+        fetch(`${BASES_URLS[1]}/timbres`, {
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null,
+          "method": "GET",
+          "mode": "cors",
+          "credentials": "omit"
+        }).then(response => response.json())
+          .then(data => {
+            me.timbres = data;
+          });
       },
       methods: {
         criar() {
@@ -118,7 +250,21 @@
 
             me.isJunted = true;
 
-            mergeImages([me.fileSelected, me.image])
+            mergeImages([
+              {
+                src: me.fileSelected,
+                x: me.options[0].x,
+                y: me.options[0].y,
+                width: me.options[2].width,
+                height: me.options[2].height
+              },
+              {
+                src: me.image,
+                x: me.options[1].x,
+                y: me.options[1].y,
+                width: me.options[3].width,
+                height: me.options[3].height
+              }])
               .then(b64 => {
                 document.querySelector('#img').src = b64
                 download.href = b64;
@@ -126,18 +272,51 @@
               });
           }
           else {
-            alert('Selecione uma imagem do seu dispositivo.')
+            alert('Selecione primeiro uma imagem em "Escolher arquivo" do seu dispositivo.')
           }
 
+        },
+        sizingImage(ev) {
+          let value = ev.target.value;
+          if (this.lastNum < value) {
+            console.log("increasing");
+          } else {
+            console.log("decreasing");
+          }
+          this.lastNum = value;
+          console.log("onInput: " + value);
+        },
+        changeImage(optionIndex, tipo) {
+          const VALUE = 5;
+          switch (tipo) {
+            case 'up':
+              this.options[optionIndex].y -= VALUE;
+              break;
+            case 'right':
+              this.options[optionIndex].x += VALUE;
+              break;
+            case 'down':
+              this.options[optionIndex].y += VALUE;
+              break;
+            case 'left':
+              this.options[optionIndex].x -= VALUE;
+              break;
+          }
+          this.criar();
+        },
+        alterarTamanho(optionIndex, tipo) {
+          this.criar();
         },
         selecionarTimbre(timbre) {
           this.isSelectedTimbre = true;
           this.timbreSelected = timbre;
           this.image = timbre.src;
+          this.criar();
         },
         async getFile(ev) {
           const file = ev.target.files[0];
           this.fileSelected = await toBase64(file);
+          this.criar();
         }
       }
     });

@@ -1,9 +1,12 @@
 {
     "timbres": [{
-        "id": 1,
-        "src": "/images/image1.png"
+        "id": 4,
+        "src": "/images/timbre600x600.png"
     }, {
         "id": 2,
-        "src": "/images/image2.png"
+        "src": "/images/timbre100x100.png"
+    }, {
+        "id": 1,
+        "src": "/images/timbre50x50.png"
     }]
 }

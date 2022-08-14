@@ -27,10 +27,6 @@
 
                     var Image = options.Image || window.Image;
 
-                    // Load sources
-
-                    console.log(sources);
-
                     var images = sources.map(function (source) {
                         return new Promise(function (resolve, reject) {
 
@@ -55,8 +51,8 @@
                     resolve(Promise.all(images)
                         .then(function (images) {
 
-                            let width = 200;
-                            let height = 200;
+                            let width = 300;
+                            let height = 300;
 
                             canvas.width = width;
                             canvas.height = height;
@@ -64,8 +60,9 @@
                             // Draw images to canvas
                             images.forEach(function (image) {
                                 ctx.globalAlpha = image.opacity ? image.opacity : 1;
-                                return ctx.drawImage(image.img, image.x || 0, image.y || 0, width, height);
+                                return ctx.drawImage(image.img, image.x || 0, image.y || 0, image.width || width, image.height || height);
                             });
+
                             // Resolve all other data URIs sync
                             return canvas.toDataURL(options.format, options.quality);
                         }));
